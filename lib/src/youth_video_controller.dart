@@ -1,3 +1,4 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:youth_biomarkers_sdk/src/interface/abstract_video_controller.dart';
 
 import 'binahSdk/binah_controller.dart';
@@ -30,7 +31,8 @@ class YouthVideoController implements IVideoController {
         onFinalResultClient: onFinalResult,
         onStateClient: onState,
         onErrorClient: onError);
-
+    await Permission.camera.request();
+    await Permission.microphone.request();
     await _client.init();
   }
 
