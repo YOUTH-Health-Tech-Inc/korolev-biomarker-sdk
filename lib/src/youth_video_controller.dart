@@ -31,6 +31,7 @@ class YouthVideoController implements IVideoController {
   @override
   Future<void> init() async {
     //TODO: check the service type
+    await Permission.camera.request();
     _client = BinahController(
         onGetImage: onGetImage,
         onWarningClient: onWarning,
