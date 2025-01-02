@@ -38,8 +38,6 @@ class YouthVideoController implements IVideoController {
         onFinalResultClient: onFinalResult,
         onStateClient: onState,
         onErrorClient: onError);
-    await Permission.camera.request();
-    await Permission.microphone.request();
     await _client.init();
   }
 
