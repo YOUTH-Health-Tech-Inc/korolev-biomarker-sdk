@@ -24,7 +24,7 @@ class BinahController
         VitalSignsListener,
         ImageDataListener,
         IVideoController {
-  BinahController({this.onWarningClient, this.onResultClient, this.onFinalResultClient,
+  BinahController({required this.onGetImage, this.onWarningClient, this.onResultClient, this.onFinalResultClient,
     this.onStateClient, this.onErrorClient});
   final Function(String)? onWarningClient;
   final Function(String)? onResultClient;
@@ -32,7 +32,7 @@ class BinahController
   final Function(String)? onStateClient;
   final Function(String)? onErrorClient;
 
-  //final Function(ImageData) onGetImage;
+  final Function(ImageData) onGetImage;
   late Session _session;
 
   @override
@@ -82,7 +82,7 @@ class BinahController
 
   @override
   void onImageData(ImageData imageData) {
-    //onGetImage(imageData);
+    onGetImage(imageData);
   }
 
   @override
