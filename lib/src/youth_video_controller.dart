@@ -1,7 +1,7 @@
-import 'package:biosensesignal_flutter_sdk/images/image_data.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youth_biomarkers_sdk/src/interface/abstract_video_controller.dart';
 
+import '../youth_biomarkers_sdk.dart';
 import 'binahSdk/binah_controller.dart';
 
 class YouthVideoController implements IVideoController {
@@ -17,7 +17,7 @@ class YouthVideoController implements IVideoController {
      new video service will be added
   */
 
-  final Function(ImageData) onGetImage;
+  final Function(YouthVideoImageData) onGetImage;
   final Function(String)? onWarning;
 
   final Function(String)? onResult;

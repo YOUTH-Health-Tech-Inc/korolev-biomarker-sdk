@@ -14,6 +14,7 @@ import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_listener.dart
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_results.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
 
+import '../../youth_biomarkers_sdk.dart';
 import '../interface/abstract_video_controller.dart';
 
 const _defaultDuration = 60;
@@ -32,7 +33,7 @@ class BinahController
   final Function(String)? onStateClient;
   final Function(String)? onErrorClient;
 
-  final Function(ImageData) onGetImage;
+  final Function(YouthVideoImageData) onGetImage;
   late Session _session;
 
   @override
@@ -82,7 +83,8 @@ class BinahController
 
   @override
   void onImageData(ImageData imageData) {
-    onGetImage(imageData);
+    final castedImageData = imageData as YouthVideoImageData;
+    onGetImage(castedImageData);
   }
 
   @override
