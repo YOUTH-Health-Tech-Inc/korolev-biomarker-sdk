@@ -1,14 +1,11 @@
 import 'dart:ui';
 
-class YouthVideoImageData {
-  final int imageWidth;
-  final int imageHeight;
-  final Rect? roi;
-  final int imageValidity;
+import 'package:biosensesignal_flutter_sdk/images/image_data.dart';
 
+class YouthVideoImageData extends ImageData {
   YouthVideoImageData(
-      {required this.imageWidth,
-        required this.imageHeight,
-        required this.roi,
-        required this.imageValidity});
+      {required super.imageWidth,
+        required super.imageHeight,
+        required super.roi,
+        required super.imageValidity});
 }
