@@ -43,9 +43,8 @@ class YouthVideoController implements IVideoController {
   }
 
   @override
-  Future<void> start({int? duration}) async {
-    // TODO: implement dispose
-    await _client.start(duration: duration);
+  void start({int? duration}) {
+    _client.start(duration: duration);
   }
 
   @override

@@ -51,7 +51,7 @@ class BinahController
   }
 
   @override
-  Future<void> start({int? duration}) {
+  void start({int? duration}) {
     _session.start(duration ?? _defaultDuration);
   }
 
