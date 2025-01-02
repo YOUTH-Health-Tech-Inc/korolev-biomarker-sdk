@@ -1,7 +1,7 @@
-import 'package:biosensesignal_flutter_sdk/images/image_data.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/assets.dart';
+import '../../../youth_biomarkers_sdk.dart';
 
 
 class YouthFaceDetectionView extends StatelessWidget {
@@ -9,7 +9,7 @@ class YouthFaceDetectionView extends StatelessWidget {
       {super.key, required this.size, required this.imageInfo});
 
   final Size? size;
-  final ImageData? imageInfo;
+  final YouthVideoImageData? imageInfo;
 
   @override
   Widget build(BuildContext context) {
