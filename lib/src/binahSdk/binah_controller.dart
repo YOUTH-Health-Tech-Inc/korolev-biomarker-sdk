@@ -73,17 +73,20 @@ class BinahController
 
   @override
   void onError(ErrorData errorData) {
-    print("ErrorData: " + errorData.toString());
+    onErrorClient!("ErrorData: " + errorData.toString());
   }
 
   @override
   void onFinalResults(VitalSignsResults results) {
-    print("VitalSignsResults: " + results.toString());
+    onFinalResultClient!(results.toString());
   }
 
   @override
   void onImageData(ImageData imageData) {
-    final castedImageData = imageData as YouthVideoImageData;
+    final castedImageData = YouthVideoImageData( imageWidth: imageData.imageWidth,
+      imageHeight: imageData.imageHeight, roi: imageData.roi,
+    imageValidity: imageData.imageValidity);
+
     onGetImage(castedImageData);
   }
 
@@ -94,17 +97,18 @@ class BinahController
 
   @override
   void onSessionStateChange(SessionState sessionState) {
-    if (sessionState == SessionState.ready) {}
-    print("SessionState: " + sessionState.toString());
+    if (sessionState == SessionState.ready) {
+      onStateClient!(sessionState.toString());
+    }
   }
 
   @override
   void onVitalSign(VitalSign vitalSign) {
-    print("VitalSign: " + vitalSign.toString());
+    onResultClient!(vitalSign.toString());
   }
 
   @override
   void onWarning(WarningData warningData) {
-    print("Warning: " + warningData.domain);
+   onWarningClient!(warningData.domain);
   }
 }
