@@ -14,8 +14,9 @@ import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_listener.dart
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_results.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
 
-import '../../youth_biomarkers_sdk.dart';
+import '../enums.dart';
 import '../interface/abstract_video_controller.dart';
+import '../typedefs.dart';
 
 const _defaultDuration = 60;
 
@@ -30,7 +31,7 @@ class BinahController
   final Function(String)? onWarningClient;
   final Function(String)? onResultClient;
   final Function(String)? onFinalResultClient;
-  final Function(String)? onStateClient;
+  final Function(YouthVideoState)? onStateClient;
   final Function(String)? onErrorClient;
 
   final Function(YouthVideoImageData) onGetImage;
@@ -39,12 +40,14 @@ class BinahController
   @override
   Future<void> init() async {
     try {
+      onStateClient?.call(YouthVideoState.initialization);
       _session = await FaceSessionBuilder()
           .withStrictMeasurementGuidance(true)
           .withImageDataListener(this)
           .withVitalSignsListener(this)
           .withSessionInfoListener(this)
           .build(LicenseDetails("6D548A-CBF9AF-43AD83-EB889E-898C7A-8D11DC"));
+      await onStateClient?.call(YouthVideoState.initialized);
     } on HealthMonitorException catch (e) {
       print("Error - " + e.toString());
     }
@@ -53,17 +56,20 @@ class BinahController
   @override
   void start({int? duration}) {
     _session.start(duration ?? _defaultDuration);
+    onStateClient?.call(YouthVideoState.process);
   }
 
   @override
   Future<void> stop() async {
     // TODO: implement stop
+    await onStateClient?.call(YouthVideoState.stopped);
   }
 
   @override
   Future<void> dispose() async {
     await _session.stop();
     await _session.terminate();
+    await onStateClient?.call(YouthVideoState.disposed);
   }
 
   @override
@@ -73,12 +79,12 @@ class BinahController
 
   @override
   void onError(ErrorData errorData) {
-    onErrorClient!("ErrorData: " + errorData.toString());
+    onErrorClient?.call("ErrorData: " + errorData.toString());
   }
 
   @override
   void onFinalResults(VitalSignsResults results) {
-    onFinalResultClient!(results.toString());
+    onFinalResultClient?.call(results.toString());
   }
 
   @override
@@ -98,17 +104,17 @@ class BinahController
   @override
   void onSessionStateChange(SessionState sessionState) {
     if (sessionState == SessionState.ready) {
-      onStateClient!(sessionState.toString());
+      print(sessionState);
     }
   }
 
   @override
   void onVitalSign(VitalSign vitalSign) {
-    onResultClient!(vitalSign.toString());
+    onResultClient?.call(vitalSign.toString());
   }
 
   @override
   void onWarning(WarningData warningData) {
-   onWarningClient!(warningData.domain);
+    onWarningClient?.call(warningData.toString());
   }
 }

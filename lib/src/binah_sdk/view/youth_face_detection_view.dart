@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/assets.dart';
-import '../../../youth_biomarkers_sdk.dart';
+import '../../common/assets.dart';
+import '../../typedefs.dart';
 
 
 class YouthFaceDetectionView extends StatelessWidget {
