@@ -14,9 +14,11 @@ import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_listener.dart
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_results.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
 
-import '../enums.dart';
+import '../wrapper/enums.dart';
 import '../interface/abstract_video_controller.dart';
-import '../typedefs.dart';
+import '../wrapper/typedefs.dart';
+import '../wrapper/youth_video_error_data.dart';
+import '../wrapper/youth_video_warning_data.dart';
 
 const _defaultDuration = 60;
 
@@ -28,11 +30,11 @@ class BinahController
         IVideoController {
   BinahController({required this.onGetImage, this.onWarningClient, this.onResultClient, this.onFinalResultClient,
     this.onStateClient, this.onErrorClient});
-  final Function(String)? onWarningClient;
+  final Function(YouthVideoWarningData)? onWarningClient;
   final Function(String)? onResultClient;
   final Function(String)? onFinalResultClient;
   final Function(YouthVideoState)? onStateClient;
-  final Function(String)? onErrorClient;
+  final Function(YouthVideoErrorData)? onErrorClient;
 
   final Function(YouthVideoImageData) onGetImage;
   late Session _session;
@@ -79,7 +81,8 @@ class BinahController
 
   @override
   void onError(ErrorData errorData) {
-    onErrorClient?.call("ErrorData: " + errorData.toString());
+    final error = new YouthVideoErrorData(errorData.code, errorData.domain);
+    onErrorClient?.call(error);
   }
 
   @override
@@ -115,6 +118,7 @@ class BinahController
 
   @override
   void onWarning(WarningData warningData) {
-    onWarningClient?.call(warningData.toString());
+    final warning = new YouthVideoWarningData(warningData.code, warningData.domain);
+    onWarningClient?.call(warning);
   }
 }

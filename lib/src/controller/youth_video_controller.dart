@@ -1,9 +1,11 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youth_biomarkers_sdk/src/interface/abstract_video_controller.dart';
+import 'package:youth_biomarkers_sdk/src/wrapper/youth_video_warning_data.dart';
 
 import '../binah_sdk/binah_controller.dart';
-import '../enums.dart';
-import '../typedefs.dart';
+import '../wrapper/enums.dart';
+import '../wrapper/typedefs.dart';
+import '../wrapper/youth_video_error_data.dart';
 
 class YouthVideoController implements IVideoController {
   YouthVideoController(
@@ -19,13 +21,13 @@ class YouthVideoController implements IVideoController {
   */
 
   final Function(YouthVideoImageData) onGetImage;
-  final Function(String)? onWarning;
+  final Function(YouthVideoWarningData)? onWarning;
 
   final Function(String)? onResult;
   final Function(String)? onFinalResult;
 
   final Function(YouthVideoState)? onState;
-  final Function(String)? onError;
+  final Function(YouthVideoErrorData)? onError;
 
   late IVideoController _client;
 

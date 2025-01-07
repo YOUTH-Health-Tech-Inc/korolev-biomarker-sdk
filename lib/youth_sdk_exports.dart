@@ -1,9 +1,10 @@
 library;
 
-export 'src/youth_sdk.dart' show YouthSdk;
-export 'src/controllers/youth_video_controller.dart' show YouthVideoController;
-export 'src/binah_sdk/view/youth_face_detection_view.dart'
-    show YouthFaceDetectionView;
-export 'src/binah_sdk/view/youth_video_view.dart' show YouthVideoView;
-export 'src/typedefs.dart';
-export 'src/enums.dart';
+export 'src/youth_sdk.dart';
+export 'src/controller/youth_video_controller.dart';
+export 'src/binah_sdk/view/youth_face_detection_view.dart';
+export 'src/binah_sdk/view/youth_video_view.dart';
+export 'src/wrapper/typedefs.dart';
+export 'src/wrapper/enums.dart';
+export 'src/wrapper/youth_video_error_data.dart';
+export 'src/wrapper/youth_video_warning_data.dart';

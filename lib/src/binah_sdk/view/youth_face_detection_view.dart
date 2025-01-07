@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../common/assets.dart';
-import '../../typedefs.dart';
+import '../../wrapper/typedefs.dart';
 
 
 class YouthFaceDetectionView extends StatelessWidget {
