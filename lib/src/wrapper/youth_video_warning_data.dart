@@ -1,6 +1,11 @@
-class YouthVideoWarningData {
+import 'package:equatable/equatable.dart';
+
+class YouthVideoWarningData extends Equatable {
   final int code;
   final String message;
 
-  YouthVideoWarningData(this.code, this.message);
+  const YouthVideoWarningData({required this.code, required this.message});
+
+  @override
+  List<Object?> get props => [code, message];
 }

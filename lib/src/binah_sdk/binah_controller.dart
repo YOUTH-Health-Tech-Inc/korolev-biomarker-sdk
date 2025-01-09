@@ -81,7 +81,7 @@ class BinahController
 
   @override
   void onError(ErrorData errorData) {
-    final error = new YouthVideoErrorData(errorData.code, errorData.domain);
+    final error = new YouthVideoErrorData(code: errorData.code, message: errorData.domain);
     onErrorClient?.call(error);
   }
 
@@ -118,7 +118,7 @@ class BinahController
 
   @override
   void onWarning(WarningData warningData) {
-    final warning = new YouthVideoWarningData(warningData.code, warningData.domain);
+    final warning = new YouthVideoWarningData(code: warningData.code, message: warningData.domain);
     onWarningClient?.call(warning);
   }
 }
