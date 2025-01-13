@@ -5,8 +5,8 @@ import 'package:youth_biomarkers_sdk/src/wrapper/youth_video_warning_data.dart';
 import '../../youth_sdk_exports.dart';
 import '../biomarker_services/binah_sdk/binah_controller.dart';
 import '../wrapper/enums.dart';
-import '../wrapper/typedefs.dart';
 import '../wrapper/youth_video_error_data.dart';
+import '../wrapper/youth_video_image_data.dart';
 
 class YouthVideoController implements IVideoController {
   YouthVideoController(

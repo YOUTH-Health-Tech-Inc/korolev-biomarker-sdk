@@ -17,6 +17,7 @@ import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
 import '../../../youth_sdk_exports.dart';
 import '../../data/mapper/youth_biomarkers_mapper.dart';
 import '../../interface/abstract_video_controller.dart';
+import '../../wrapper/youth_video_image_data.dart';
 
 
 const _defaultDuration = 60;
@@ -50,7 +51,8 @@ class BinahController
           .build(LicenseDetails("6D548A-CBF9AF-43AD83-EB889E-898C7A-8D11DC"));
       await onStateClient?.call(YouthVideoState.initialized);
     } on HealthMonitorException catch (e) {
-      print("Error - " + e.toString());
+      final error = new YouthVideoErrorData(code: e.code, message: e.domain);
+      onErrorClient?.call(error);
     }
   }
 
@@ -92,7 +94,7 @@ class BinahController
 
   @override
   void onImageData(ImageData imageData) {
-    final castedImageData = YouthVideoImageData( imageWidth: imageData.imageWidth,
+    final castedImageData = new YouthVideoImageData( imageWidth: imageData.imageWidth,
       imageHeight: imageData.imageHeight, roi: imageData.roi,
     imageValidity: imageData.imageValidity);
 
