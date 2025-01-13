@@ -14,11 +14,10 @@ import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_listener.dart
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_results.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
 
-import '../wrapper/enums.dart';
-import '../interface/abstract_video_controller.dart';
-import '../wrapper/typedefs.dart';
-import '../wrapper/youth_video_error_data.dart';
-import '../wrapper/youth_video_warning_data.dart';
+import '../../../youth_sdk_exports.dart';
+import '../../data/mapper/youth_biomarkers_mapper.dart';
+import '../../interface/abstract_video_controller.dart';
+
 
 const _defaultDuration = 60;
 
@@ -32,7 +31,7 @@ class BinahController
     this.onStateClient, this.onErrorClient});
   final Function(YouthVideoWarningData)? onWarningClient;
   final Function(String)? onResultClient;
-  final Function(String)? onFinalResultClient;
+  final Function(List<YouthBiomarkerClientData>)? onFinalResultClient;
   final Function(YouthVideoState)? onStateClient;
   final Function(YouthVideoErrorData)? onErrorClient;
 
@@ -87,7 +86,8 @@ class BinahController
 
   @override
   void onFinalResults(VitalSignsResults results) {
-    onFinalResultClient?.call(results.toString());
+    final mappedResult = YouthBiomarkersMapper().mapBioServiceObjToClientDataList(results);
+    onFinalResultClient?.call(mappedResult);
   }
 
   @override
