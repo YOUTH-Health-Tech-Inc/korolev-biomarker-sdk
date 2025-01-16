@@ -1,0 +1,96 @@
+<!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <style>
+        html, body {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          margin-top: 100;
+        }
+      </style>
+      <script type="module" src="https://liqa.haut.ai/liqa.js"></script>
+    </head>
+    <body>
+      <hautai-liqa
+  license="eyJpZCI6IkhFSU4tOTA1MC0wIn0="
+  messages='{
+  "source_selection": {
+     "camera_permissions_warning": {
+       "title": "Accesso alla fotocamera negato",
+      "instructions_reset": "Aggiorna le autorizzazioni della fotocamera del browser per questa app per utilizzare la fotocamera o caricare una foto dal dispositivo.",
+      "instructions_reload": "Aggiorna le autorizzazioni della fotocamera del browser per questa app per utilizzare la fotocamera o caricare una foto dal dispositivo."
+    },
+    "title": "Seleziona lopzione di acquisizione",
+    "camera_video": "Scatta una foto",
+    "upload_photo": "Carica dal dispositivo"
+  },
+   "preview": {
+  "title": "Ben fatto!",
+    "text": "",
+    "retake": "Rifai",
+    "submit": "Invia"
+    },
+    "error": {
+    "title": "Ooops",
+    "description": "Il video in diretta non è riuscito a causa di un errore interno. Si prega di utilizzare l opzione Carica foto."
+  },
+  "face_live_video": {
+     "face_displaced": "Place face inside frame",
+    "face_placement_fixed": "Perfect!",
+    "face_distance_far": "Move closer",
+    "face_distance_close": "Move further away",
+    "face_distance_fixed": "Perfect!",
+    "face_angle_deviation": "Turn face to camera",
+    "face_angle_fixed": "Perfect!",
+    "lighting_insufficient": "Find a brighter place",
+    "lighting_excessive": "Find a darker place",
+    "lighting_angle_deviation": "Turn to the light source",
+    "lighting_fixed": "Perfect!",
+    "capturing": "Look at the camera"
+  }}'
+></hautai-liqa>
+      <script>
+        const liqa = document.querySelector("hautai-liqa");
+
+        liqa.addEventListener("ready", () => postMessage("ready"));
+        liqa.addEventListener("error", ({ detail: error }) =>
+          postMessage("error", {
+            code: error.code,
+            message: error.message,
+            cause: error.cause?.message,
+          }),
+        );
+        liqa.addEventListener("capture", async ({ detail: capture }) =>
+          postMessage("capture", {
+            source: capture.source,
+            data: await blobToBase64(await capture.blob()), // serialize the JS Blob object
+          }),
+        );
+
+        function postMessage(name, payload) {
+          let text = `LIQA: \${name}`;
+
+          if (payload) {
+            let extars = JSON.stringify(payload);
+            // Do not overwhelm the log
+            if (extars.length >= 1024) extars = extars.substring(0, 1024) + "...";
+            text += `\\n\${extars}`;
+          }
+
+          const NativeApp = window.flutter_inappwebview.callHandler; /* InAppWebView */
+          NativeApp('postMessage', JSON.stringify({ name, payload }));
+        }
+
+        function blobToBase64(blob) {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          });
+        }
+      </script>
+    </body>
+  </html>

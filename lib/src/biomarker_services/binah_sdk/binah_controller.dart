@@ -16,7 +16,7 @@ import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
 
 import '../../../youth_sdk_exports.dart';
 import '../../data/mapper/youth_biomarkers_mapper.dart';
-import '../../interface/abstract_video_controller.dart';
+import '../../interface/abstract_measurement_controller.dart';
 import '../../wrapper/youth_video_image_data.dart';
 
 
@@ -27,7 +27,7 @@ class BinahController
         SessionInfoListener,
         VitalSignsListener,
         ImageDataListener,
-        IVideoController {
+        IMeasurementController {
   BinahController({required this.onGetImage, this.onWarningClient, this.onResultClient, this.onFinalResultClient,
     this.onStateClient, this.onErrorClient});
   final Function(YouthVideoWarningData)? onWarningClient;

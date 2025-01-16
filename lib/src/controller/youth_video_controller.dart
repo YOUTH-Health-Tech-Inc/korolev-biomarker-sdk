@@ -1,5 +1,5 @@
 import 'package:permission_handler/permission_handler.dart';
-import 'package:youth_biomarkers_sdk/src/interface/abstract_video_controller.dart';
+import 'package:youth_biomarkers_sdk/src/interface/abstract_measurement_controller.dart';
 import 'package:youth_biomarkers_sdk/src/wrapper/youth_video_warning_data.dart';
 
 import '../../youth_sdk_exports.dart';
@@ -8,7 +8,7 @@ import '../wrapper/enums.dart';
 import '../wrapper/youth_video_error_data.dart';
 import '../wrapper/youth_video_image_data.dart';
 
-class YouthVideoController implements IVideoController {
+class YouthVideoController implements IMeasurementController {
   YouthVideoController(
       {required this.onGetImage,
       this.onWarning,
@@ -30,7 +30,7 @@ class YouthVideoController implements IVideoController {
   final Function(YouthVideoState)? onState;
   final Function(YouthVideoErrorData)? onError;
 
-  late IVideoController _client;
+  late IMeasurementController _client;
 
   @override
   Future<void> init() async {

@@ -1,4 +1,4 @@
-abstract class IVideoController {
+abstract class IMeasurementController {
   Future<void> init();
 
   void start({int? duration});
