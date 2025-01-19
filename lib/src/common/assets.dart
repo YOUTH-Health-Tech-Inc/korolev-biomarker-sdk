@@ -1,4 +1,4 @@
-abstract class YOAssets {
+abstract class YouthAssets {
   static const images = _Images();
   static const files = _Files();
 }
@@ -14,7 +14,7 @@ class _Images {
 class _Files {
   const _Files();
 
-  static const _basePathFiles = 'assets/files';
+  static const _basePathFiles = 'lib/assets/files';
 
-  final liqaScript = '$_basePathFiles/liqa_html.txt';
+  final liqaScript = '$_basePathFiles/liqa_script.txt';
 }

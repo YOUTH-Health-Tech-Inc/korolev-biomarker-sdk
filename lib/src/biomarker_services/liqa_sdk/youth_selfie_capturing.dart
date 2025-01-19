@@ -28,7 +28,7 @@ class _SelfieCapturingState extends State<YouthSelfieCapturing> {
 
   Future<void> _getScript() async {
     await Permission.camera.request();
-    String script = await rootBundle.loadString(YOAssets.files.liqaScript);
+    String script = await rootBundle.loadString(YouthAssets.files.liqaScript);
     setState(() {
       _script = script;
     });
@@ -36,7 +36,7 @@ class _SelfieCapturingState extends State<YouthSelfieCapturing> {
 
   @override
   Widget build(BuildContext context) {
-    return InAppWebView(
+    return _script.isEmpty ? Container() : InAppWebView(
       initialData: InAppWebViewInitialData(
           mimeType: 'text/html',
           data: _script,

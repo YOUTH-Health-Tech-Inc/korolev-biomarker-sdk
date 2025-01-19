@@ -32,7 +32,7 @@ class YouthFaceDetectionView extends StatelessWidget {
         child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(YOAssets.images.scanFrame),
+                    image: AssetImage(YouthAssets.images.scanFrame),
                     fit: BoxFit.contain)
             ),
             width: 20 + (roi.width * widthFactor) / devicePixelRatio,

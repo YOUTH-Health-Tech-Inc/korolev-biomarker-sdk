@@ -44,7 +44,7 @@ class BinahController
     try {
       onStateClient?.call(YouthVideoState.initialization);
       _session = await FaceSessionBuilder()
-          .withStrictMeasurementGuidance(true)
+         // .withStrictMeasurementGuidance(false)
           .withImageDataListener(this)
           .withVitalSignsListener(this)
           .withSessionInfoListener(this)
@@ -70,7 +70,7 @@ class BinahController
 
   @override
   Future<void> dispose() async {
-    await _session.stop();
+    await _session.stop(); //handle if session is not implemented
     await _session.terminate();
     await onStateClient?.call(YouthVideoState.disposed);
   }
@@ -94,7 +94,7 @@ class BinahController
 
   @override
   void onImageData(ImageData imageData) {
-    final castedImageData = new YouthVideoImageData( imageWidth: imageData.imageWidth,
+    final castedImageData = YouthVideoImageData( imageWidth: imageData.imageWidth,
       imageHeight: imageData.imageHeight, roi: imageData.roi,
     imageValidity: imageData.imageValidity);
 
@@ -120,7 +120,7 @@ class BinahController
 
   @override
   void onWarning(WarningData warningData) {
-    final warning = new YouthVideoWarningData(code: warningData.code, message: warningData.domain);
+    final warning = YouthVideoWarningData(code: warningData.code, message: warningData.domain);
     onWarningClient?.call(warning);
   }
 }
