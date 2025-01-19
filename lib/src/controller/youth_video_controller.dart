@@ -1,5 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youth_biomarkers_sdk/src/interface/abstract_measurement_controller.dart';
+import 'package:youth_biomarkers_sdk/src/wrapper/youth_data_point.dart';
 import 'package:youth_biomarkers_sdk/src/wrapper/youth_video_warning_data.dart';
 
 import '../../youth_sdk_exports.dart';
@@ -24,8 +25,8 @@ class YouthVideoController implements IMeasurementController {
   final Function(YouthVideoImageData) onGetImage;
   final Function(YouthVideoWarningData)? onWarning;
 
-  final Function(String)? onResult;
-  final Function(List<YouthBiomarkerClientData>)? onFinalResult;
+  final Function(YouthDataPoint)? onResult;
+  final Function(List<YouthDataPoint>)? onFinalResult;
 
   final Function(YouthVideoState)? onState;
   final Function(YouthVideoErrorData)? onError;

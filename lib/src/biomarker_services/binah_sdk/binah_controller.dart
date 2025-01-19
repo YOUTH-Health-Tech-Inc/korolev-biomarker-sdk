@@ -13,12 +13,12 @@ import 'package:biosensesignal_flutter_sdk/session/session_state.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_listener.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_results.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
+import 'package:youth_biomarkers_sdk/src/common/mapper/youth_result_mapper.dart';
+import 'package:youth_biomarkers_sdk/src/wrapper/youth_data_point.dart';
 
 import '../../../youth_sdk_exports.dart';
-import '../../data/mapper/youth_biomarkers_mapper.dart';
 import '../../interface/abstract_measurement_controller.dart';
 import '../../wrapper/youth_video_image_data.dart';
-
 
 const _defaultDuration = 60;
 
@@ -28,11 +28,18 @@ class BinahController
         VitalSignsListener,
         ImageDataListener,
         IMeasurementController {
-  BinahController({required this.onGetImage, this.onWarningClient, this.onResultClient, this.onFinalResultClient,
-    this.onStateClient, this.onErrorClient});
+  BinahController({
+    required this.onGetImage,
+    this.onWarningClient,
+    this.onResultClient,
+    this.onFinalResultClient,
+    this.onStateClient,
+    this.onErrorClient,
+  });
+
   final Function(YouthVideoWarningData)? onWarningClient;
-  final Function(String)? onResultClient;
-  final Function(List<YouthBiomarkerClientData>)? onFinalResultClient;
+  final Function(YouthDataPoint)? onResultClient;
+  final Function(List<YouthDataPoint>)? onFinalResultClient;
   final Function(YouthVideoState)? onStateClient;
   final Function(YouthVideoErrorData)? onErrorClient;
 
@@ -44,14 +51,13 @@ class BinahController
     try {
       onStateClient?.call(YouthVideoState.initialization);
       _session = await FaceSessionBuilder()
-         // .withStrictMeasurementGuidance(false)
           .withImageDataListener(this)
           .withVitalSignsListener(this)
           .withSessionInfoListener(this)
           .build(LicenseDetails("6D548A-CBF9AF-43AD83-EB889E-898C7A-8D11DC"));
       await onStateClient?.call(YouthVideoState.initialized);
     } on HealthMonitorException catch (e) {
-      final error = new YouthVideoErrorData(code: e.code, message: e.domain);
+      final error = YouthVideoErrorData(code: e.code, message: e.domain);
       onErrorClient?.call(error);
     }
   }
@@ -64,63 +70,60 @@ class BinahController
 
   @override
   Future<void> stop() async {
-    // TODO: implement stop
     await onStateClient?.call(YouthVideoState.stopped);
   }
 
   @override
   Future<void> dispose() async {
-    await _session.stop(); //handle if session is not implemented
     await _session.terminate();
     await onStateClient?.call(YouthVideoState.disposed);
   }
 
   @override
   void onEnabledVitalSigns(SessionEnabledVitalSigns enabledVitalSigns) {
-    print("SessionEnabledVitalSigns: " + enabledVitalSigns.toString());
   }
 
   @override
-  void onError(ErrorData errorData) {
-    final error = new YouthVideoErrorData(code: errorData.code, message: errorData.domain);
-    onErrorClient?.call(error);
-  }
-
-  @override
-  void onFinalResults(VitalSignsResults results) {
-    final mappedResult = YouthBiomarkersMapper().mapBioServiceObjToClientDataList(results);
-    onFinalResultClient?.call(mappedResult);
-  }
+  void onLicenseInfo(LicenseInfo licenseInfo) {}
 
   @override
   void onImageData(ImageData imageData) {
-    final castedImageData = YouthVideoImageData( imageWidth: imageData.imageWidth,
-      imageHeight: imageData.imageHeight, roi: imageData.roi,
-    imageValidity: imageData.imageValidity);
+    final castedImageData = YouthVideoImageData(
+        imageWidth: imageData.imageWidth,
+        imageHeight: imageData.imageHeight,
+        roi: imageData.roi,
+        imageValidity: imageData.imageValidity);
 
     onGetImage(castedImageData);
   }
 
   @override
-  void onLicenseInfo(LicenseInfo licenseInfo) {
-    print("LicenseInfo: " + licenseInfo.toString());
-  }
-
-  @override
   void onSessionStateChange(SessionState sessionState) {
-    if (sessionState == SessionState.ready) {
-      print(sessionState);
-    }
   }
 
   @override
   void onVitalSign(VitalSign vitalSign) {
-    onResultClient?.call(vitalSign.toString());
+    final dataPoint = YouthResultMapper.handleBinahResult(vitalSign);
+    onResultClient?.call(dataPoint);
+  }
+
+  @override
+  void onFinalResults(VitalSignsResults results) {
+    final dataPoints = YouthResultMapper.handleBinahResults(results);
+    onFinalResultClient?.call(dataPoints);
   }
 
   @override
   void onWarning(WarningData warningData) {
-    final warning = YouthVideoWarningData(code: warningData.code, message: warningData.domain);
+    final warning = YouthVideoWarningData(
+        code: warningData.code, message: warningData.domain);
     onWarningClient?.call(warning);
+  }
+
+  @override
+  void onError(ErrorData errorData) {
+    final error =
+        YouthVideoErrorData(code: errorData.code, message: errorData.domain);
+    onErrorClient?.call(error);
   }
 }

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../common/assets.dart';
 import '../../../wrapper/youth_video_image_data.dart';
 
+const _faceFrameGap = 20.0;
 
-class YouthFaceDetectionView extends StatelessWidget {
+class YouthFaceDetectionView extends StatefulWidget {
   const YouthFaceDetectionView(
       {super.key, required this.size, required this.imageInfo});
 
@@ -12,20 +13,35 @@ class YouthFaceDetectionView extends StatelessWidget {
   final YouthVideoImageData? imageInfo;
 
   @override
+  State<YouthFaceDetectionView> createState() => _YouthFaceDetectionViewState();
+}
+
+class _YouthFaceDetectionViewState extends State<YouthFaceDetectionView> {
+  late double devicePixelRatio;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (imageInfo == null) {
-      return Container();
+    if (widget.imageInfo == null) {
+      return SizedBox.shrink();
     }
 
-    var roi = imageInfo!.roi;
+    var roi = widget.imageInfo!.roi;
     if (roi == null) {
-      return Container();
+      return SizedBox.shrink();
     }
 
-    var devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-    var widthFactor = size!.width / (imageInfo!.imageWidth / devicePixelRatio);
-    var heightFactor =
-        size!.height / (imageInfo!.imageHeight / devicePixelRatio);
+    var widthFactor =
+        widget.size!.width / (widget.imageInfo!.imageWidth / devicePixelRatio);
+    var heightFactor = widget.size!.height /
+        (widget.imageInfo!.imageHeight / devicePixelRatio);
     return Positioned(
         left: (roi.left * widthFactor) / devicePixelRatio,
         top: (roi.top * heightFactor) / devicePixelRatio,
@@ -33,9 +49,9 @@ class YouthFaceDetectionView extends StatelessWidget {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(YouthAssets.images.scanFrame),
-                    fit: BoxFit.contain)
-            ),
-            width: 20 + (roi.width * widthFactor) / devicePixelRatio,
-            height: 20 + (roi.height * heightFactor) / devicePixelRatio));
+                    fit: BoxFit.contain)),
+            width: _faceFrameGap + (roi.width * widthFactor) / devicePixelRatio,
+            height: _faceFrameGap +
+                (roi.height * heightFactor) / devicePixelRatio));
   }
 }
