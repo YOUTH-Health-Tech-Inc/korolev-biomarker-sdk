@@ -110,6 +110,7 @@ class BinahController
   @override
   void onFinalResults(VitalSignsResults results) {
     final dataPoints = YouthResultMapper.handleBinahResults(results);
+    onStateClient?.call(YouthVideoState.complete);
     onFinalResultClient?.call(dataPoints);
   }
 

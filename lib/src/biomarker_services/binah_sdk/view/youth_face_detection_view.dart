@@ -17,15 +17,6 @@ class YouthFaceDetectionView extends StatefulWidget {
 }
 
 class _YouthFaceDetectionViewState extends State<YouthFaceDetectionView> {
-  late double devicePixelRatio;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +29,7 @@ class _YouthFaceDetectionViewState extends State<YouthFaceDetectionView> {
       return SizedBox.shrink();
     }
 
+    var devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     var widthFactor =
         widget.size!.width / (widget.imageInfo!.imageWidth / devicePixelRatio);
     var heightFactor = widget.size!.height /
