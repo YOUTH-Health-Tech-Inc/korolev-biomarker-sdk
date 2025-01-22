@@ -1,15 +1,26 @@
 import 'package:dio/dio.dart';
+import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
+import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
+import 'package:youth_biomarkers_sdk/src/data/core/rest_client.dart';
+import 'package:youth_biomarkers_sdk/src/data/models/haut_analyze_model.dart';
 
-//TODO: temporary decision until we have just one server request
 class ApiService {
-  Future<dynamic> postSelfieDataForAnalysis(String selfieBase64) async {
-    try {
-      final biomarkersResponse = await Dio().post(
-          "https://test.youth-api.com/api/v2/processing/face_photo/",
-          data: {'base64url_bytes', selfieBase64});
-      return biomarkersResponse.data as String;
-    } catch (e) {
-      print('Server request error: $e');
-    }
+  static final ApiService _instance = ApiService._();
+  late RestClient _client;
+
+  ApiService._() {
+    final dio = Dio();
+    dio.interceptors.add(TalkerDioLogger(
+        settings: const TalkerDioLoggerSettings(
+            printRequestHeaders: true, printResponseHeaders: true)));
+    _client = RestClient(dio);
+  }
+
+  factory ApiService() {
+    return _instance;
+  }
+
+  Future<HautAnalyzeModel> getSelfieAnalyzeData(String imageBase64) async {
+    return _client.analyzeSelfieByHaut(imageBase64);
   }
 }

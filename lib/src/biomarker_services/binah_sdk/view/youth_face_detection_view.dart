@@ -17,7 +17,6 @@ class YouthFaceDetectionView extends StatefulWidget {
 }
 
 class _YouthFaceDetectionViewState extends State<YouthFaceDetectionView> {
-
   @override
   Widget build(BuildContext context) {
     if (widget.imageInfo == null) {

@@ -7,17 +7,21 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/assets.dart';
 
-class YouthSelfieCapturing extends StatefulWidget {
-  final Function(String name, dynamic value) onStatusChanged;
+const _webViewMimeType = 'text/html';
+const _webViewUri = 'https://localhost/';
 
-  const YouthSelfieCapturing(this.onStatusChanged);
+const _callbackHandlerName = 'postMessage';
+
+class YouthSelfieCaptureView extends StatefulWidget {
+  final Function(String imageBase64) onSelfieCaptured;
+
+  const YouthSelfieCaptureView(this.onSelfieCaptured, {super.key});
 
   @override
-  State<YouthSelfieCapturing> createState() => _SelfieCapturingState();
+  State<YouthSelfieCaptureView> createState() => _YouthSelfieCaptureViewState();
 }
 
-class _SelfieCapturingState extends State<YouthSelfieCapturing> {
-
+class _YouthSelfieCaptureViewState extends State<YouthSelfieCaptureView> {
   String _script = '';
 
   @override
@@ -28,46 +32,52 @@ class _SelfieCapturingState extends State<YouthSelfieCapturing> {
 
   Future<void> _getScript() async {
     await Permission.camera.request();
-    String script = await rootBundle.loadString(YouthAssets.files.liqaScript);
-    setState(() {
-      _script = script;
-    });
+    _script = await rootBundle.loadString(YouthAssets.files.liqaScript);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return _script.isEmpty ? Container() : InAppWebView(
-      initialData: InAppWebViewInitialData(
-          mimeType: 'text/html',
-          data: _script,
-          baseUrl: WebUri("https://localhost/")),
-      initialSettings: InAppWebViewSettings(
-          javaScriptEnabled: true,
-          mediaPlaybackRequiresUserGesture: false,
-          allowsInlineMediaPlayback: true,
-          disableHorizontalScroll: true,
-          disableVerticalScroll: true,
-          supportZoom: true,
-          sharedCookiesEnabled: true),
-      onPermissionRequest: (controller, request) async {
-        return PermissionResponse(
-            resources: request.resources,
-            action: PermissionResponseAction.GRANT);
-      },
-      onWebViewCreated: (InAppWebViewController controller) {
-        controller.addJavaScriptHandler(
-          handlerName: 'postMessage',
-          callback: (args) {
-            if (args.isNotEmpty) {
-              final messageObject = jsonDecode(args[0]) as Map<String, dynamic>;
-              final payload = messageObject['payload'] as Map<String, dynamic>?;
-              if (payload != null) {
-                widget.onStatusChanged('base64', payload);
-              }
-            }
-          },
-        );
-      },
-    );
+    return _script.isEmpty
+        ? SizedBox.shrink()
+        : InAppWebView(
+            initialData: InAppWebViewInitialData(
+                mimeType: _webViewMimeType,
+                data: _script,
+                baseUrl: WebUri(_webViewUri)),
+            initialSettings: InAppWebViewSettings(
+                javaScriptEnabled: true,
+                mediaPlaybackRequiresUserGesture: false,
+                allowsInlineMediaPlayback: true,
+                disableHorizontalScroll: true,
+                disableVerticalScroll: true,
+                supportZoom: true,
+                sharedCookiesEnabled: true),
+            onPermissionRequest: (controller, request) async {
+              return PermissionResponse(
+                  resources: request.resources,
+                  action: PermissionResponseAction.GRANT);
+            },
+            onWebViewCreated: (InAppWebViewController controller) {
+              controller.addJavaScriptHandler(
+                handlerName: _callbackHandlerName,
+                callback: (args) => _handleCallback(args),
+              );
+            },
+          );
+  }
+
+  void _handleCallback(List<dynamic> args) {
+    if (args.isNotEmpty) {
+      final messageObject = jsonDecode(args[0]) as Map<String, dynamic>;
+      final payload = messageObject['payload'] as Map<String, dynamic>?;
+      if (payload != null) {
+        widget.onSelfieCaptured(_convertDataToImageBase64(payload['data']));
+      }
+    }
+  }
+
+  String _convertDataToImageBase64(String data) {
+    return data.replaceFirst('data:image/jpeg;base64,', '');
   }
 }

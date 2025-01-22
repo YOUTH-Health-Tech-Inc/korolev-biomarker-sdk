@@ -1,36 +1,16 @@
-import '../data/core/api_service.dart';
+import 'package:youth_biomarkers_sdk/src/common/mapper/youth_result_mapper.dart';
+import 'package:youth_biomarkers_sdk/src/data/core/api_service.dart';
+import 'package:youth_biomarkers_sdk/src/wrapper/youth_data_point.dart';
 
 class YouthSelfieController {
-  YouthSelfieController({required this.onFinalResult}) {
-    _apiService = ApiService();
-  }
+  const YouthSelfieController();
 
-  String _base64Selfie = '';
-  late ApiService _apiService;
-  final Function(String) onFinalResult;
-
-  void init(String base64Selfie) {
-    _base64Selfie = base64Selfie;
-  }
-
-  Future<void> start() async {
+  Future<List<YouthDataPoint>?> analyzeSelfie(String imageBase64) async {
     try {
-      if(_base64Selfie.isNotEmpty) {
-        var result = await _apiService.postSelfieDataForAnalysis(_base64Selfie);
-        onFinalResult(result);
-      } else {
-        print('base64Selfie is not initialized');
-      }
+      final hautResult = await ApiService().getSelfieAnalyzeData(imageBase64);
+      return YouthResultMapper.handleHautResults(hautResult);
     } catch (e) {
-      print('Server communication error $e');
+      return null;
     }
-  }
-
-  void stop() {
-    // TODO: implement stop
-  }
-
-  void dispose() {
-    _base64Selfie = '';
   }
 }

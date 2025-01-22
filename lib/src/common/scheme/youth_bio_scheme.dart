@@ -112,5 +112,55 @@ const youthBioScheme = [
     type: YouthBioType.binahPns,
     name: 'PNS index',
     unit: YouthBioUnitType.num,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinRedness,
+    name: 'Skin redness',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinUniformness,
+    name: 'Skin uniformness',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinHydration,
+    name: 'Skin hydration',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinPoresHealth,
+    name: 'Pores health',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinAcneIndex,
+    name: 'Acne index',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinWrinklesIndex,
+    name: 'Lines (wrinkles) index',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinPigmentation,
+    name: 'Pigmentation index',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinEyeAreaCondition,
+    name: 'Eye area condition',
+    unit: YouthBioUnitType.percent,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinPerceivedAge,
+    name: 'Perceived age (years)',
+    unit: YouthBioUnitType.year,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.faceSkinEyeAge,
+    name: 'Eye age',
+    unit: YouthBioUnitType.year,
   )
 ];
