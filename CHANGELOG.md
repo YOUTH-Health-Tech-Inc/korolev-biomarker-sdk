@@ -1,4 +1,8 @@
 ## [0.2.2]
+-  Add error state to `YouthFaceDetectionView`
+-  Add camera frames warnings to `BinahController`
+
+## [0.2.2]
 -  Fix `YouthAssets` path
 -  Fix and rename `YouthSelfieCaptureView`
 -  Add new biomarkers to `YouthBioScheme` according to Binah and Haut

@@ -1,3 +1,4 @@
+import 'package:biosensesignal_flutter_sdk/images/image_validity.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/assets.dart';
@@ -39,10 +40,17 @@ class _YouthFaceDetectionViewState extends State<YouthFaceDetectionView> {
         child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(YouthAssets.images.scanFrame),
+                    image: AssetImage(
+                        _getFrameAsset(widget.imageInfo!.imageValidity)),
                     fit: BoxFit.contain)),
             width: _faceFrameGap + (roi.width * widthFactor) / devicePixelRatio,
             height: _faceFrameGap +
                 (roi.height * heightFactor) / devicePixelRatio));
+  }
+
+  String _getFrameAsset(int validity) {
+    return validity == ImageValidity.valid
+        ? YouthAssets.images.scanFrame
+        : YouthAssets.images.scanFrameError;
   }
 }

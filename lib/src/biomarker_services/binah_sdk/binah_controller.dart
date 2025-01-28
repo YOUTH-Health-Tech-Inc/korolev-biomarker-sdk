@@ -3,6 +3,7 @@ import 'package:biosensesignal_flutter_sdk/alerts/warning_data.dart';
 import 'package:biosensesignal_flutter_sdk/health_monitor_exception.dart';
 import 'package:biosensesignal_flutter_sdk/images/image_data.dart';
 import 'package:biosensesignal_flutter_sdk/images/image_data_listener.dart';
+import 'package:biosensesignal_flutter_sdk/images/image_validity.dart';
 import 'package:biosensesignal_flutter_sdk/license/license_details.dart';
 import 'package:biosensesignal_flutter_sdk/license/license_info.dart';
 import 'package:biosensesignal_flutter_sdk/session/session.dart';
@@ -37,7 +38,7 @@ class BinahController
     this.onErrorClient,
   });
 
-  final Function(YouthVideoWarningData)? onWarningClient;
+  final Function(YouthVideoWarningData?)? onWarningClient;
   final Function(YouthDataPoint)? onResultClient;
   final Function(List<YouthDataPoint>)? onFinalResultClient;
   final Function(YouthVideoState)? onStateClient;
@@ -80,8 +81,7 @@ class BinahController
   }
 
   @override
-  void onEnabledVitalSigns(SessionEnabledVitalSigns enabledVitalSigns) {
-  }
+  void onEnabledVitalSigns(SessionEnabledVitalSigns enabledVitalSigns) {}
 
   @override
   void onLicenseInfo(LicenseInfo licenseInfo) {}
@@ -94,12 +94,12 @@ class BinahController
         roi: imageData.roi,
         imageValidity: imageData.imageValidity);
 
+    _checkImageValidity(imageData.imageValidity);
     onGetImage(castedImageData);
   }
 
   @override
-  void onSessionStateChange(SessionState sessionState) {
-  }
+  void onSessionStateChange(SessionState sessionState) {}
 
   @override
   void onVitalSign(VitalSign vitalSign) {
@@ -126,5 +126,48 @@ class BinahController
     final error =
         YouthVideoErrorData(code: errorData.code, message: errorData.domain);
     onErrorClient?.call(error);
+  }
+
+  void _checkImageValidity(int validity) {
+    switch (validity) {
+      case ImageValidity.valid:
+        onWarningClient?.call(null);
+        break;
+      case ImageValidity.invalidDeviceOrientation:
+        // Invalid device orientation
+        onWarningClient?.call(YouthVideoWarningData(
+          code: validity,
+          message: "Invalid device orientation",
+        ));
+        break;
+      case ImageValidity.invalidRoi:
+        // Invalid ROI
+        onWarningClient?.call(YouthVideoWarningData(
+          code: validity,
+          message: "Can't recognize your face",
+        ));
+        break;
+      case ImageValidity.tiltedHead:
+        // Tilted Head
+        onWarningClient?.call(YouthVideoWarningData(
+          code: validity,
+          message: "Keep your head level",
+        ));
+        break;
+      case ImageValidity.faceTooFar:
+        // Face Too Far
+        onWarningClient?.call(YouthVideoWarningData(
+          code: validity,
+          message: "Your face is too far",
+        ));
+        break;
+      case ImageValidity.unevenLight:
+        // Uneven Light
+        onWarningClient?.call(YouthVideoWarningData(
+          code: validity,
+          message: "Uneven light",
+        ));
+        break;
+    }
   }
 }

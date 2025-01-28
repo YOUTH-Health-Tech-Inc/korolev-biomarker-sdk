@@ -23,7 +23,7 @@ class YouthVideoController implements IMeasurementController {
   */
 
   final Function(YouthVideoImageData) onGetImage;
-  final Function(YouthVideoWarningData)? onWarning;
+  final Function(YouthVideoWarningData?)? onWarning;
 
   final Function(YouthDataPoint)? onResult;
   final Function(List<YouthDataPoint>)? onFinalResult;

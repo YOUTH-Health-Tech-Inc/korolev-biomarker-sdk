@@ -9,6 +9,7 @@ class _Images {
   static const _basePathImage = 'packages/youth_biomarkers_sdk/assets/images';
 
   final scanFrame = '$_basePathImage/img_scan_frame.png';
+  final scanFrameError = '$_basePathImage/img_scan_frame_error.png';
 }
 
 class _Files {
