@@ -15,11 +15,9 @@ import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_listener.dart
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_results.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
 import 'package:youth_biomarkers_sdk/src/common/mapper/youth_result_mapper.dart';
-import 'package:youth_biomarkers_sdk/src/wrapper/youth_data_point.dart';
 
 import '../../../youth_sdk_exports.dart';
 import '../../interface/abstract_measurement_controller.dart';
-import '../../wrapper/youth_video_image_data.dart';
 
 const _defaultDuration = 60;
 
