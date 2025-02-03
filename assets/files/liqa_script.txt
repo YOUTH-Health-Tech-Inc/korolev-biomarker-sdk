@@ -19,13 +19,13 @@
   messages='{
   "source_selection": {
      "camera_permissions_warning": {
-       "title": "Accesso alla fotocamera negato",
-      "instructions_reset": "Aggiorna le autorizzazioni della fotocamera del browser per questa app per utilizzare la fotocamera o caricare una foto dal dispositivo.",
-      "instructions_reload": "Aggiorna le autorizzazioni della fotocamera del browser per questa app per utilizzare la fotocamera o caricare una foto dal dispositivo."
+       "title": "Camera access denied",
+      "instructions_reset": "Updated",
+      "instructions_reload": "Update"
     },
-    "title": "Seleziona lopzione di acquisizione",
-    "camera_video": "Scatta una foto",
-    "upload_photo": "Carica dal dispositivo"
+    "title": "Select the acquisition option",
+    "camera_video": "Take a photo",
+    "upload_photo": "Take from device"
   },
    "preview": {
   "title": "Well done!",
@@ -35,7 +35,7 @@
     },
     "error": {
     "title": "Ooops",
-    "description": "Il video in diretta non è riuscito a causa di un errore interno. Si prega di utilizzare l opzione Carica foto."
+    "description": "Live video failed due to internal error. Please use Upload Photo option."
   },
   "face_live_video": {
      "face_displaced": "Place face inside frame",

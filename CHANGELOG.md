@@ -1,4 +1,7 @@
-## [0.2.2]
+## [0.2.4]
+-  Fix localization for `liqa_script.txt`
+
+## [0.2.3]
 -  Add error state to `YouthFaceDetectionView`
 -  Add camera frames warnings to `BinahController`
 
