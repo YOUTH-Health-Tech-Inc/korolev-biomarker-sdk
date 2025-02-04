@@ -1,6 +1,7 @@
 final class BinahAlertMapper {
   static String getErrorContext(int code) {
     return switch (code) {
+      1 => "Your face was not detected for the minimum time required to start measuring. Please try again",
       4 => "You should open the device settings and turn off 'Low Power Mode' or charge your device until the 'Low Power Mode' turns off.",
       6 => "You should verify that the device flashlight works properly and retry.",
       7 => "You should verify that device flashlight works properly and retry.",

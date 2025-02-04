@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:biosensesignal_flutter_sdk/alerts/error_data.dart';
 import 'package:biosensesignal_flutter_sdk/alerts/warning_data.dart';
 import 'package:biosensesignal_flutter_sdk/health_monitor_exception.dart';
@@ -21,6 +23,7 @@ import '../../../youth_sdk_exports.dart';
 import '../../interface/abstract_measurement_controller.dart';
 
 const _defaultDuration = 60;
+const _noFaceDetectionTime = 7;
 
 class BinahController
     implements
@@ -44,7 +47,11 @@ class BinahController
   final Function(YouthVideoErrorData)? onErrorClient;
 
   final Function(YouthVideoImageData) onGetImage;
+
   late Session _session;
+
+  var _sessionState = SessionState.initializing;
+  Timer? _timer;
 
   @override
   Future<void> init() async {
@@ -83,6 +90,7 @@ class BinahController
   Future<void> dispose() async {
     await _session.terminate();
     await onStateClient?.call(YouthVideoState.disposed);
+    _stopNoFaceDetectionTimer();
   }
 
   @override
@@ -104,7 +112,9 @@ class BinahController
   }
 
   @override
-  void onSessionStateChange(SessionState sessionState) {}
+  void onSessionStateChange(SessionState sessionState) {
+    _sessionState = sessionState;
+  }
 
   @override
   void onVitalSign(VitalSign vitalSign) {
@@ -137,43 +147,75 @@ class BinahController
   void _checkImageValidity(int validity) {
     switch (validity) {
       case ImageValidity.valid:
-        onWarningClient?.call(null);
+        _handleImageValidityWarning(null);
         break;
       case ImageValidity.invalidDeviceOrientation:
         // Invalid device orientation
-        onWarningClient?.call(YouthVideoWarningData(
+        _handleImageValidityWarning(YouthVideoWarningData(
           code: validity,
           message: "Invalid device orientation",
         ));
         break;
       case ImageValidity.invalidRoi:
         // Invalid ROI
-        onWarningClient?.call(YouthVideoWarningData(
+        _handleImageValidityWarning(YouthVideoWarningData(
           code: validity,
           message: "Can't recognize your face",
         ));
         break;
       case ImageValidity.tiltedHead:
         // Tilted Head
-        onWarningClient?.call(YouthVideoWarningData(
+        _handleImageValidityWarning(YouthVideoWarningData(
           code: validity,
           message: "Keep your head level",
         ));
         break;
       case ImageValidity.faceTooFar:
         // Face Too Far
-        onWarningClient?.call(YouthVideoWarningData(
+        _handleImageValidityWarning(YouthVideoWarningData(
           code: validity,
           message: "Your face is too far",
         ));
         break;
       case ImageValidity.unevenLight:
         // Uneven Light
-        onWarningClient?.call(YouthVideoWarningData(
+        _handleImageValidityWarning(YouthVideoWarningData(
           code: validity,
           message: "Uneven light",
         ));
         break;
+    }
+  }
+
+  void _handleImageValidityWarning(YouthVideoWarningData? warning) {
+    if(_sessionState == SessionState.processing) {
+      onWarningClient?.call(warning);
+      warning == null
+          ? _stopNoFaceDetectionTimer()
+          : _startNoFaceDetectionTimer();
+    }
+  }
+
+  /// Check long-term warning during _noFaceDetectionTime
+  /// and after that throw an error
+  Future<void> _startNoFaceDetectionTimer() async {
+    if (_timer == null) {
+      var countdown = _noFaceDetectionTime;
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        countdown--;
+        if (countdown == 0) {
+          await dispose();
+          onErrorClient?.call(YouthVideoErrorData(
+              code: 1, message: BinahAlertMapper.getErrorContext(1)));
+        }
+      });
+    }
+  }
+
+  void _stopNoFaceDetectionTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+      _timer = null;
     }
   }
 }

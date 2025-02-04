@@ -1,3 +1,7 @@
+## [0.2.5]
+-  Add `BinahAlertMapper`
+-  Fix `BinahController` error and warning handler 
+
 ## [0.2.4]
 -  Fix localization for `liqa_script.txt`
 
