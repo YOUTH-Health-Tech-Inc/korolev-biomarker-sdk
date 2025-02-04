@@ -14,6 +14,7 @@ import 'package:biosensesignal_flutter_sdk/session/session_state.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_listener.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vital_signs_results.dart';
 import 'package:biosensesignal_flutter_sdk/vital_signs/vitals/vital_sign.dart';
+import 'package:youth_biomarkers_sdk/src/biomarker_services/binah_sdk/binah_alert_mapper.dart';
 import 'package:youth_biomarkers_sdk/src/common/mapper/youth_result_mapper.dart';
 
 import '../../../youth_sdk_exports.dart';
@@ -56,15 +57,21 @@ class BinahController
           .build(LicenseDetails("6D548A-CBF9AF-43AD83-EB889E-898C7A-8D11DC"));
       await onStateClient?.call(YouthVideoState.initialized);
     } on HealthMonitorException catch (e) {
-      final error = YouthVideoErrorData(code: e.code, message: e.domain);
+      final error = YouthVideoErrorData(
+          code: e.code, message: BinahAlertMapper.getErrorContext(e.code));
       onErrorClient?.call(error);
     }
   }
 
   @override
-  void start({int? duration}) {
-    _session.start(duration ?? _defaultDuration);
-    onStateClient?.call(YouthVideoState.process);
+  void start({int? duration}) async {
+    try {
+      await _session.start(duration ?? _defaultDuration);
+      onStateClient?.call(YouthVideoState.process);
+    } on HealthMonitorException catch (e) {
+      onErrorClient?.call(YouthVideoErrorData(
+          code: e.code, message: BinahAlertMapper.getErrorContext(e.code)));
+    }
   }
 
   @override
@@ -114,15 +121,16 @@ class BinahController
 
   @override
   void onWarning(WarningData warningData) {
-    final warning = YouthVideoWarningData(
-        code: warningData.code, message: warningData.domain);
-    onWarningClient?.call(warning);
+    onWarningClient?.call(YouthVideoWarningData(
+        code: warningData.code,
+        message: BinahAlertMapper.getErrorContext(warningData.code)));
   }
 
   @override
   void onError(ErrorData errorData) {
-    final error =
-        YouthVideoErrorData(code: errorData.code, message: errorData.domain);
+    final error = YouthVideoErrorData(
+        code: errorData.code,
+        message: BinahAlertMapper.getErrorContext(errorData.code));
     onErrorClient?.call(error);
   }
 
