@@ -1,4 +1,4 @@
-## [0.2.5]
+## [0.2.6]
 -  Fix haut result value for `YouthResultMapper`
 -  Remove deprecated classes
 
