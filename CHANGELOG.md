@@ -1,4 +1,8 @@
 ## [0.2.5]
+-  Fix haut result value for `YouthResultMapper`
+-  Remove deprecated classes
+
+## [0.2.5]
 -  Add `BinahAlertMapper`
 -  Fix `BinahController` error and warning handler 
 
