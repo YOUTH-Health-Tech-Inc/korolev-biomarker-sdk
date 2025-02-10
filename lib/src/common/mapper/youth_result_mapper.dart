@@ -58,7 +58,7 @@ final class YouthResultMapper {
     return YouthDataPoint(
       type: schemeItem.type.key,
       name: schemeItem.name,
-      value: result.value.value,
+      value: result.value.value.toString(),
       unit: schemeItem.unit,
     );
   }
