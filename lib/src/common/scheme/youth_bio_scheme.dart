@@ -94,6 +94,11 @@ const youthBioScheme = [
     unit: YouthBioUnitType.status,
   ),
   YouthBioSchemeItem(
+    type: YouthBioType.binahStressLevel,
+    name: 'Stress Level',
+    unit: YouthBioUnitType.status,
+  ),
+  YouthBioSchemeItem(
     type: YouthBioType.binahRecoverAbility,
     name: 'Recovery Ability / Energy',
     unit: YouthBioUnitType.status,
@@ -111,6 +116,21 @@ const youthBioScheme = [
   YouthBioSchemeItem(
     type: YouthBioType.binahPns,
     name: 'PNS index',
+    unit: YouthBioUnitType.num,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.binahHypertensionRisk,
+    name: 'Hypertension Risk',
+    unit: YouthBioUnitType.status,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.binahWellnessLevel,
+    name: 'Wellness Level',
+    unit: YouthBioUnitType.status,
+  ),
+  YouthBioSchemeItem(
+    type: YouthBioType.binahWellnessIndex,
+    name: 'Wellness Index',
     unit: YouthBioUnitType.num,
   ),
   YouthBioSchemeItem(
