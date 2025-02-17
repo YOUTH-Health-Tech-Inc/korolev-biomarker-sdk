@@ -9,25 +9,13 @@ part of 'haut_analyze_marker_model.dart';
 HautAnalyzeMarkerModel _$HautAnalyzeMarkerModelFromJson(
         Map<String, dynamic> json) =>
     HautAnalyzeMarkerModel(
-      json['type'] as String,
-      HautAnalyzeValueModel.fromJson(json['value'] as Map<String, dynamic>),
+      json['biomarker_name'] as String,
+      json['value'] as String,
     );
 
 Map<String, dynamic> _$HautAnalyzeMarkerModelToJson(
         HautAnalyzeMarkerModel instance) =>
     <String, dynamic>{
-      'type': instance.type,
-      'value': instance.value,
-    };
-
-HautAnalyzeValueModel _$HautAnalyzeValueModelFromJson(
-        Map<String, dynamic> json) =>
-    HautAnalyzeValueModel(
-      json['value'],
-    );
-
-Map<String, dynamic> _$HautAnalyzeValueModelToJson(
-        HautAnalyzeValueModel instance) =>
-    <String, dynamic>{
+      'biomarker_name': instance.name,
       'value': instance.value,
     };

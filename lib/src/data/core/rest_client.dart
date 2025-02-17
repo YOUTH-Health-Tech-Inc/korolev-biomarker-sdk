@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:youth_biomarkers_sdk/src/data/models/haut_analyze_model.dart';
+import 'package:youth_biomarkers_sdk/src/data/models/haut_analyze_marker_model.dart';
+import 'package:youth_biomarkers_sdk/src/data/models/haut_analyze_payload_data.dart';
 
 part 'rest_client.g.dart';
 
@@ -11,7 +12,9 @@ const apiVersionV2 = "v2";
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @POST("$apiVersionV2/processing/face_photo/")
-  Future<HautAnalyzeModel> analyzeSelfieByHaut(
-      @Field("base64url_bytes") String imageBase64);
+  @POST("$apiVersionV2/capture/selfie/")
+  Future<List<HautAnalyzeMarkerModel>> analyzeSelfieByHaut(
+      @Field("user_id") String userId,
+      @Field("client_id") String clientId,
+      @Field("payload") HautAnalyzePayloadData payload);
 }

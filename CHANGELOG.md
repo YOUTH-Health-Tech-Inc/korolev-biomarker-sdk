@@ -1,3 +1,7 @@
+## [0.2.7]
+-  Update haut result value for `YouthResultMapper`
+-  Update haut recognize request/response
+
 ## [0.2.6]
 -  Fix haut result value for `YouthResultMapper`
 -  Remove deprecated classes

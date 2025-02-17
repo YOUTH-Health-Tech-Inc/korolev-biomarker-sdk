@@ -7,7 +7,6 @@ import 'package:youth_biomarkers_sdk/src/common/scheme/youth_bio_scheme.dart';
 import 'package:youth_biomarkers_sdk/src/common/scheme/youth_bio_scheme_item.dart';
 import 'package:youth_biomarkers_sdk/src/common/scheme/youth_bio_type.dart';
 import 'package:youth_biomarkers_sdk/src/data/models/haut_analyze_marker_model.dart';
-import 'package:youth_biomarkers_sdk/src/data/models/haut_analyze_model.dart';
 import 'package:youth_biomarkers_sdk/src/wrapper/youth_data_point.dart';
 
 final class YouthResultMapper {
@@ -84,16 +83,17 @@ final class YouthResultMapper {
     return youthBioScheme.firstWhere((item) => item.type == youthType);
   }
 
-  static List<YouthDataPoint> handleHautResults(HautAnalyzeModel hautModel) {
-    return hautModel.data.map((item) => _handleHautResult(item)).toList();
+  static List<YouthDataPoint> handleHautResults(
+      List<HautAnalyzeMarkerModel> data) {
+    return data.map((item) => _handleHautResult(item)).toList();
   }
 
   static YouthDataPoint _handleHautResult(HautAnalyzeMarkerModel result) {
-    final schemeItem = _convertHautTypeToYouth(result.type);
+    final schemeItem = _convertHautTypeToYouth(result.name);
     return YouthDataPoint(
       type: schemeItem.type.key,
       name: schemeItem.name,
-      value: result.value.value.toString(),
+      value: result.value,
       unit: schemeItem.unit,
     );
   }
@@ -105,6 +105,13 @@ final class YouthResultMapper {
       HautBioScheme.faceSkinHydration => YouthBioType.faceSkinHydration,
       HautBioScheme.faceSkinPoresHealth => YouthBioType.faceSkinPoresHealth,
       HautBioScheme.faceSkinPerceivedAge => YouthBioType.faceSkinPerceivedAge,
+      HautBioScheme.faceSkinEyeAge => YouthBioType.faceSkinEyeAge,
+      HautBioScheme.faceSkinWrinklesIndex => YouthBioType.faceSkinWrinklesIndex,
+      HautBioScheme.faceSkinAcneIndex => YouthBioType.faceSkinAcneIndex,
+      HautBioScheme.faceSkinPigmentationIndex =>
+        YouthBioType.faceSkinPigmentation,
+      HautBioScheme.faceSkinEyeAreaCondition =>
+        YouthBioType.faceSkinEyeAreaCondition,
       _ => YouthBioType.unknown
     };
 

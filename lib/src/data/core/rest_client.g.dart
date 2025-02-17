@@ -20,25 +20,38 @@ class _RestClient implements RestClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HautAnalyzeModel> analyzeSelfieByHaut(String imageBase64) async {
+  Future<List<HautAnalyzeMarkerModel>> analyzeSelfieByHaut(
+    String userId,
+    String clientId,
+    HautAnalyzePayloadData payload,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'base64url_bytes': imageBase64};
-    final _options = _setStreamType<HautAnalyzeModel>(
+    final _data = {
+      'user_id': userId,
+      'client_id': clientId,
+      'payload': payload,
+    };
+    final _options = _setStreamType<List<HautAnalyzeMarkerModel>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'v2/processing/face_photo/',
+            'v2/capture/selfie/',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late HautAnalyzeModel _value;
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<HautAnalyzeMarkerModel> _value;
     try {
-      _value = HautAnalyzeModel.fromJson(_result.data!);
+      _value = _result.data!
+          .map(
+            (dynamic i) =>
+                HautAnalyzeMarkerModel.fromJson(i as Map<String, dynamic>),
+          )
+          .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
