@@ -10,7 +10,7 @@ class HautAnalyzeMarkerModel {
   final String name;
 
   @JsonKey(name: "value")
-  final String value;
+  final int value;
 
   factory HautAnalyzeMarkerModel.fromJson(Map<String, dynamic> json) =>
       _$HautAnalyzeMarkerModelFromJson(json);

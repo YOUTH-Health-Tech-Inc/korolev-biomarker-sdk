@@ -10,7 +10,7 @@ HautAnalyzeMarkerModel _$HautAnalyzeMarkerModelFromJson(
         Map<String, dynamic> json) =>
     HautAnalyzeMarkerModel(
       json['biomarker_name'] as String,
-      json['value'] as String,
+      (json['value'] as num).toInt(),
     );
 
 Map<String, dynamic> _$HautAnalyzeMarkerModelToJson(
